@@ -55,7 +55,7 @@ coverage.xml
 local_settings.py
 .DS_Store
 temp/
-*.sqllite*
+*.sqlite*
 secretkey.txt
 .*.swp
 
