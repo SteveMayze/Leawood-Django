@@ -9,6 +9,7 @@
 
 import serial
 import time
+import json
 from xbee import XBee, DigiMesh, ZigBee
 
 ser = serial.Serial('/dev/ttyAMA0', baudrate=9600)
@@ -17,7 +18,11 @@ print(ser.name)
 
 def print_data( data ):
     msg = str(data["rf_data"])
-    print("{0}".format(msg));
+    dStart = msg.find('{')
+    dEnd = msg.rfind('}')+ 1
+    data = json.loads('[' + msg[dStart:dEnd] + ']')
+    localtime = time.asctime( time.localtime(time.time()) )
+    print(str("{0}, ID:{1}, {2} V,  {3}"+ chr(176)+"C").format(localtime, data[0]['id'], data[0]['voltage'], data[0]['temperature']))
 
 
 xbee = ZigBee(ser=ser, escaped=True, callback=print_data)
