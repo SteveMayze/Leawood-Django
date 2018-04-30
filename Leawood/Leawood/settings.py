@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'channels',
     'main',
-    'fence'
+    'fence',
+    'tastypie'
 ]
 
 MIDDLEWARE = [
