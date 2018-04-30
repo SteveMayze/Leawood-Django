@@ -23,18 +23,17 @@ def print_data( data ):
     dEnd = msg.rfind('}')+ 1
     data = json.loads('[' + msg[dStart:dEnd] + ']')
     localtime = time.asctime( time.localtime(time.time()) )
-    print( "Recevied: " + str(json.dumps(data)) )
-    ## response = hologram.sendMessage(json.dumps(data), topics=["leawood/sensors/fence1"])
-    ## print( "RESPONSE: " + response )
+    print( "Recevied: " + str(json.dumps(data)))
 
-## def print_data( data ):
-    ## msg = str(data["rf_data"])
-    ## dStart = msg.find('{')
-    ## dEnd = msg.rfind('}')+ 1
-    ## data = json.loads('[' + msg[dStart:dEnd] + ']')
-    ## localtime = time.asctime( time.localtime(time.time()) )
-    ## print(str("{0}, ID:{1}, {2} V,  {3}"+ chr(176)+"C").format(localtime, data[0]['id'], data[0]['voltage'], data[0]['temperature']))
-
+    ## This is a JSON telegram.
+    ## 1. Assert the field device
+    ## 2. Build the JSON object to send to the server.
+    ##    From the telegram, we also need the sender and this needs
+    ##    to be populated in the object to create the log entry.
+    ##
+    ##    The address of the device should be captured in the model so that
+    ##    we can use this for the prompting of data and the locate the device
+    ##    again.
 
 xbee = ZigBee(ser=ser, escaped=True, callback=print_data)
 digi = DigiMesh(ser=ser)
@@ -43,6 +42,7 @@ while True:
     try:
         print("Requesting data - " + str(datetime.datetime.now()) )
         digi.tx(frame_id = b'\x01', dest_addr=b'\x00\x13\xA2\x00\x41\x5C\x0F\x64', data=b'D' )
+        ## Request new data every five minutes.
         time.sleep(5 * 60)
     except KeyboardInterrupt:
         break
