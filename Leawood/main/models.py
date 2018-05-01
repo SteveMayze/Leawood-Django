@@ -74,7 +74,7 @@ class Data_Log_Entry(models.Model):
      name = models.CharField(max_length=100)
      time_stamp = models.DateTimeField()
      value = models.DecimalField(max_digits=9, decimal_places=3)
-     metadata = models.ForeignKey(Property_Metadata, on_delete=models.CASCADE)
+     param_metadata = models.ForeignKey(Property_Metadata, on_delete=models.CASCADE)
 
      class Meta:
           verbose_name_plural = 'Data_log_Entries'
