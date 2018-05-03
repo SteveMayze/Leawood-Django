@@ -19,7 +19,11 @@ ser = serial.Serial('/dev/ttyS0', baudrate=9600)
 ##ser = serial.Serial('/dev/ttyUSB0', baudrate=9600)
 print(ser.name)
 
+## Defining some variables that are used by the REST connection
+## TODO These should be configurable.
 baseurl = 'http://leawood:8000/leawood/api/v1'
+field_device_prefix = "/leawood/api/v1/field_device/{0}/"
+param_prefix = "/leawood/api/v1/metadata/{0}/"
 headers = {'Authorization':'ApiKey admin:40a7590dd47da3443b7fff6dbcdcdfafee5446b8'}
 
 
@@ -30,84 +34,54 @@ def persist_data( data ):
     dStart = msg.find('{')
     dEnd = msg.rfind('}')+ 1
     data = json.loads( msg[dStart:dEnd] )
-    localtime = time.asctime( time.localtime(time.time()) )
-    ## print( "Recevied: {source_addr: {0}, data: {1}".format(addr, json.dumps(data)))
+    log_time = datetime.datetime.now()
     print( "Recevied: {source_addr: "+str(addr.hex())+" data: "+str(json.dumps(data)))
     
-    ## This is a JSON telegram.
-    ## 1. Assert the field device
-    ## print("Getting the field device details")
-
     url = baseurl + '/field_device?address={0}'.format(addr.hex().upper())
     device_id = requests.get(url, headers=headers).json()['objects'][0]['id']
-    ## print("Device ID {0} "+str(device_id))
-
-
-##    ## Temperature
-##    url = "http://leawood:8000/leawood/api/v1/metadata?field_device={0}&name=temperature".format(device_id)
-##    headers = {'Authorization':'ApiKey admin:40a7590dd47da3443b7fff6dbcdcdfafee5446b8'}
-##    temp_id = requests.get(url, headers=headers).json()['objects'][0]['id']
-##    print("Temperature ID {0}".format(temp_id))
-##
-##    ## Temperature
-##    url = "http://leawood:8000/leawood/api/v1/metadata?field_device={0}&name=temperature".format(device_id)
-##    headers = {'Authorization':'ApiKey admin:40a7590dd47da3443b7fff6dbcdcdfafee5446b8'}
-##    temp_id = requests.get(url, headers=headers).json()['objects'][0]['id']
-##    print("Temperature ID {0}".format(temp_id))
 
     url = baseurl + '/metadata?field_device={0}'.format(device_id)
-    ## print("Getting the parameter details from {0}".format(url))
     all_metadata = requests.get(url, headers=headers).json()['objects']
 
-    ## print("All metadata {0}".format(all_metadata))
-
-    ## print("RAW JSON={0}".format(data))
-
+    data_value = ""
     for metadata in all_metadata:
         ## The metadata schema needs a key type column that will come from the
         ## field device so that the metadata row can be located.
+        ## At the moment, I have to hard code this.
         meta_name = metadata['name']
-        ## print("Prcessing param {0}".format(meta_name))
+        print("Prcessing param {0}".format(meta_name))
         if meta_name == 'temperature':
             ## Process for temperature
-            temp = data['temp']
-            print("The temperature is {0} C".format(temp))
-
-            url= baseurl+'log_entry'
-            
+            data_value = data['temp']
 
         if meta_name == 'battery':
             ## Process for battery voltage
-            voltage = data['voltage']
-            print("The battery voltage is {0} V".format(voltage))
+            data_value = data['voltage']
 
         if meta_name == 'backup_battery':
             ## Process for the backup battery
-            backup_battery = data['batt']
-            print("The backup battery voltage is {0} V".format(backup_battery))
+            data_value = data['batt']
 
-        ## We now have basically all the information
-        ## LOG ENTRY
-            ## name
-            ## field_device
-            ## metadata
-            ## time_stamp
-            ## value
-    
-    
+        payload = {}
+        payload['field_device'] = field_device_prefix.format(device_id)
+        payload['param_metadata'] = param_prefix.format(metadata['id'])
+        payload['time_stamp'] = log_time.isoformat()
+        payload['value'] = data_value
+
+        print("Logging {0}".format(payload))
+
+        url= baseurl+'/log_entry/'
+        response = requests.post(url, headers=headers, json=payload)
+        print("Response {0}".format(response.status_code))
+
+        ## Handler needed to interpet the responses etc.
+
     print("END")
 
+#######################################################################
+## Scrip Start
+#######################################################################
     
-    
-    
-    ## 2. Build the JSON object to send to the server.
-    ##    From the telegram, we also need the sender and this needs
-    ##    to be populated in the object to create the log entry.
-    ##
-    ##    The address of the device should be captured in the model so that
-    ##    we can use this for the prompting of data and the locate the device
-    ##    again.
-
 xbee = ZigBee(ser=ser, escaped=True, callback=persist_data)
 digi = DigiMesh(ser=ser)
 

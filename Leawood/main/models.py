@@ -71,20 +71,19 @@ particular point in time.
 """
 class Data_Log_Entry(models.Model):
      field_device = models.ForeignKey(Field_Device, on_delete=models.CASCADE)
-     name = models.CharField(max_length=100)
+     param_metadata = models.ForeignKey(Property_Metadata, on_delete=models.CASCADE)
      time_stamp = models.DateTimeField()
      value = models.DecimalField(max_digits=9, decimal_places=3)
-     param_metadata = models.ForeignKey(Property_Metadata, on_delete=models.CASCADE)
 
      class Meta:
           verbose_name_plural = 'Data_log_Entries'
-          unique_together = ("field_device", "name", "time_stamp")
+          unique_together = ("field_device", "param_metadata", "time_stamp")
           indexes = [
-               models.Index(fields=['field_device', 'name', 'time_stamp']),
+               models.Index(fields=['field_device', 'param_metadata', 'time_stamp']),
           ]
           order_with_respect_to = 'field_device'
 
      def __str__(self):
-          return self.field_device + ' ' + self.name + ' ' + self.time_stamp + ' ' + self.value
+          return self.field_device.name + ' ' + self.param_metadata.name + ' ' + str(self.time_stamp) + ' ' + str(self.value)
 
 

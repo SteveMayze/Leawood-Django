@@ -36,6 +36,7 @@ class Property_MetadataResource(AuthenticationMixin, ModelResource):
 
 class Data_Log_EntryResource(AuthenticationMixin, ModelResource):
     field_device = fields.ForeignKey(Field_DeviceResource, 'field_device')
+    param_metadata = fields.ForeignKey(Property_MetadataResource, 'param_metadata')
 
     class Meta:
         queryset = Data_Log_Entry.objects.all()
