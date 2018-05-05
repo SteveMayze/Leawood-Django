@@ -32,7 +32,7 @@ class Property_MetadataResource(AuthenticationMixin, ModelResource):
     class Meta:
         queryset = Property_Metadata.objects.all()
         resource_name = 'metadata'
-        filtering = {'field_device':ALL, 'name':ALL}
+        filtering = {'field_device':ALL, 'name':ALL, 'id':ALL}
 
 class Data_Log_EntryResource(AuthenticationMixin, ModelResource):
     field_device = fields.ForeignKey(Field_DeviceResource, 'field_device')
@@ -41,7 +41,7 @@ class Data_Log_EntryResource(AuthenticationMixin, ModelResource):
     class Meta:
         queryset = Data_Log_Entry.objects.all()
         resource_name = 'log_entry'
-        filtering = {'time_stamp': ALL, 'field_device': ALL }
+        filtering = {'time_stamp': ALL, 'field_device': ALL, 'param_metadata':ALL }
 
 
 v1_api = Api(api_name='v1')
