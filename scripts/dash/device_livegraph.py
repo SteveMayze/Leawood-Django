@@ -84,7 +84,7 @@ app.layout = html.Div(children=[
     ], style={'columnCount':2}),
         html.Div(children=html.Div(id='output-graph'), className='row'),
         dcc.Interval(
-                id='graph-update', interval=60*1000
+                id='graph-update', interval=5*60*1000
                 ),
     ], className="container",style={'width':'98%','margin-left':10,'margin-right':10,'max-width':50000})
 

@@ -17,10 +17,12 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.conf.urls import include
 from main.api import v1_api
+from main import views
 
 from main import views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^leawood/', include('main.urls')),
+    url(r'^leawood/admin/', admin.site.urls),
+    url(r'^leawood/main/', include('main.urls')),
+    url(r'^leawood/device/', include('device.urls')),
     url(r'^leawood/api/', include(v1_api.urls)),]

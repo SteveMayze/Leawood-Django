@@ -62,9 +62,9 @@ def update_value(device, items):
                 print("name={0}".format(item_info['name']))
                 data.append({'x':df.index, 'y':df.value, 'type':'line', 'name':item_info['name']})
 
-        print( df )
+        print('DF={}'.format(df) )
+        print('DATA={}'.format(data) )
 
-        
         return dcc.Graph(id='device_graph',
                          figure={
                                  'data': data,

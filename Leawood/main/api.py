@@ -44,8 +44,20 @@ class Data_Log_EntryResource(AuthenticationMixin, ModelResource):
         filtering = {'time_stamp': ALL, 'field_device': ALL, 'param_metadata':ALL }
 
 
+class Data_Log_LastEntryResource(AuthenticationMixin, ModelResource):
+    field_device = fields.ForeignKey(Field_DeviceResource, 'field_device')
+    param_metadata = fields.ForeignKey(Property_MetadataResource, 'param_metadata')
+
+    class Meta:
+        queryset = Data_Log_Entry.objects.order_by('-time_stamp')
+        resource_name = 'last_log'
+        filtering = {'time_stamp': ALL, 'field_device': ALL, 'param_metadata':ALL }
+
+
 v1_api = Api(api_name='v1')
 v1_api.register(Field_DeviceResource())
 v1_api.register(UnitResource())
 v1_api.register(Property_MetadataResource())
 v1_api.register(Data_Log_EntryResource())
+v1_api.register(Data_Log_LastEntryResource())
+

@@ -4,5 +4,5 @@ from django.shortcuts import render
 
 
 def index( request ):
-        response = render(request, 'index.htm', context=context_dict)
+        response = render(request, 'main/index.htm')
         return response
