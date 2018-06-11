@@ -2,33 +2,60 @@
 {% load staticfiles %}
 
 {% block page_title_block %}
-    <h1>{{ pagetitle }}</h1>
 {% endblock %}
 
 {% block body_block %}
 	<div class="container">
-		<div class="jumbotron">
-			<h2>Devices</h2>
-		</div>
-	</div>
-	
-	<div class="container">
-		<ul class="nav nav-tabs" id="myTab" role="tablist">
+		<h1>{{ pagename }}</h1>
+		<ul class="nav nav-tabs" id="nav-tab" role="tablist">
 			<li class="nav-item">
-				<a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Sensors</a>
+				<a class="nav-link active show" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Sensors</a>
 			</li>
 			<li class="nav-item">
 				<a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
 			</li>
-			<li class="nav-item">
-				<a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Contact</a>
-			</li>
 		</ul>
+		<br/>
 		<div class="tab-content" id="myTabContent">
-		<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">SENSOR ONE TWO THREE</div>
-		<div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">REGISTER ONE TWO THREE</div>
-		<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">BLAH</div>
+			<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+				
+				<!-- DEVICES MANAGEMENT PAGE -->
+				<!-- SEARCH BAR -->
+					<form method="GET" class="navbar-form" action="">
+						<div class="row form-group">
+							<div class="col-xs-9 col-sm-9 col-lg-9 col-xl-9">
+								<input type="text" name='q' class="form-control" placeholder="Search Device" value="{{ request.GET.q }}"/>					
+							</div>
+							<div class="col-xs-1 col-sm-1 col-lg-1 col-xl-1">
+							<button type="submit" class="btn btn-default">Search</button>
+							</div>
+						</div>
+					</form>
+				<!-- DEVICES LIST -->
+				
+			</div>
+			<div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+				<form class="navbar-form">
+						<div class="row form-group">
+							<div class="col-xs-12 col-sm-12 col-lg-12 col-xl-12">
+								<button type="submit" class="btn btn-default">Scan</button>
+								<label >Scan for new devices</label>
+							</div>
+							</div>
+						</div>
+				</form>
+			</div>
 		</div>
+		
+		<nav>
+			<ul class="pagination">
+				<li class="diabled"><a href="#">1</a></li>
+				<li class="active"><a href="#">2</a></li>
+				<li class="diabled"><a href="#">3</a></li>
+				<li class="diabled"><a href="#">...</li>
+				<li class="diabled"><a href="#">99</a></li>
+			</ul>
+		</nav>
 	</div>
 {% endblock %}
 

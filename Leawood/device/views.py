@@ -5,5 +5,10 @@ from django.shortcuts import render
 
 
 def index( request ):
-        response = render(request, 'device/index.htm')
-        return response
+	context_dict = {}
+	context_dict["pagetitle"] = "Leawood"
+	context_dict["pagename"] = "Devices"
+	context_dict["titlebar"] = "Leawood - Devices"
+	response = render(request, 'device/index.htm', context=context_dict)
+	return response
+
