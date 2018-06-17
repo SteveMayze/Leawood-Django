@@ -24,5 +24,5 @@ from main import views
 urlpatterns = [
     url(r'^leawood/admin/', admin.site.urls),
     url(r'^leawood/main/', include('main.urls')),
-    url(r'^leawood/device/', include('device.urls')),
+    url(r'^leawood/device/', include('device.urls', namespace="device")),
     url(r'^leawood/api/', include(v1_api.urls)),]

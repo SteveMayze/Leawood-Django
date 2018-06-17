@@ -1,0 +1,23 @@
+{% extends 'base.htm' %}
+{% load staticfiles %}
+
+{% block page_title_block %}
+{% endblock %}
+
+{% block body_block %}
+
+
+<div class="container">
+	<h1>{{ pagename }}</h1>
+	<form method="POST" action="" class="form">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input class="btn btn-default" type="submit" value="Save"/>
+	</form>
+</div>
+
+
+
+{% endblock %}
+
+
