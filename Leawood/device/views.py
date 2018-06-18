@@ -1,14 +1,30 @@
 
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.shortcuts import render, get_object_or_404, redirect
 from main.models import Field_Device
 from device.forms import DeviceForm
+from django.db.models import Q
+
+
+def check_user( request ):
+	if not request.user.is_staff or not request.user.is_superuser:
+		raise Http404
+		
+	## if not request.user.is_authenticated():
+	##	raise Http404
 
     
 def device_list( request ):
 	queryset_list = Field_Device.objects.all()
+	
+	query = request.GET.get("q")
+	if query:
+		queryset_list = queryset_list.filter(
+				Q(name__icontains=query) | 
+				Q(description__icontains=query)
+			).distinct()
 	page_request_var = "page"
 	paginator = Paginator(queryset_list, 5)
 	page = request.GET.get(page_request_var)
@@ -46,6 +62,9 @@ def device_detail( request , id=None ):
 
 	
 def device_create( request ):
+	
+	check_user(request)
+	
 	form = DeviceForm(request.POST or None)
 	
 	if form.is_valid():
@@ -64,6 +83,10 @@ def device_create( request ):
 		
 	
 def device_update( request, id=None ):
+	
+	check_user(request)		
+
+	
 	instance = get_object_or_404(Field_Device, id=id)
 	form = DeviceForm(request.POST or None, instance=instance)
 	
@@ -86,6 +109,9 @@ def device_update( request, id=None ):
 
 
 def device_delete( request, id=None ):
+	
+	check_user(request)		
+
 	instance = get_object_or_404(Field_Device, id=id)
 	instance.delete()
 	messages.success(request, "Successully deleted")
