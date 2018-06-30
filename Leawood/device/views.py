@@ -17,7 +17,7 @@ def check_user( request ):
 
     
 def device_list( request ):
-	queryset_list = Field_Device.objects.all()
+	queryset_list = Field_Device.objects.filter(registered = True )
 	
 	query = request.GET.get("q")
 	if query:
@@ -80,6 +80,34 @@ def device_create( request ):
 	context_dict["form"] = form
 	response = render(request, 'device/device_form.htm', context=context_dict)
 	return response
+	
+def device_scan( request ):
+	
+	queryset_list = Field_Device.objects.filter(registered = False)
+	
+	query = request.GET.get("q")
+	if query:
+		queryset_list = queryset_list.filter(
+				Q(name__icontains=query) | 
+				Q(description__icontains=query)
+			).distinct()
+	page_request_var = "page"
+	paginator = Paginator(queryset_list, 5)
+	page = request.GET.get(page_request_var)
+	try:	
+		queryset = paginator.page(page)
+	except PageNotAnInteger:
+		queryset = paginator.page(1)
+	except EmptyPage:
+		queryset = paginator.page(paginator.num_pages)
+	
+	context_dict = {}
+	context_dict["pagetitle"] = "Leawood"
+	context_dict["pagename"] = "Device Scan"
+	context_dict["titlebar"] = "Leawood - Device Scan"
+	context_dict["object_list"] = queryset
+	response = render( request, 'device/device_scan.htm', context=context_dict )
+	return response	
 		
 	
 def device_update( request, id=None ):

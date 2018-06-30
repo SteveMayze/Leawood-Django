@@ -17,8 +17,8 @@
 		</ul>
 		<br/>
 		<div class="tab-content" id="myTabContent">
-			<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-				
+			<!-- DEVICES PANEL -->
+			<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">				
 				<!-- DEVICES MANAGEMENT PAGE -->
 				<!-- SEARCH BAR -->
 					<form method="GET" class="navbar-form" action="">
@@ -37,8 +37,8 @@
 					<div class="col-sm-12">
 						<div class="thumbnail">
 							<div class="caption">
-								<h3><a href="{{obj.get_absolute_url}}">{{ obj.name }}</a>
-								<small>{{ obj.address}}</small></h3>
+								<h3><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a>
+								<small>{{ obj.address }}</small></h3>
 								<p>{{ obj.description }}</p>
 							</div>
 						</div>
@@ -88,16 +88,19 @@
 					</div>	
 				</div>
 			</div>
+			
+			<!-- REGISTER PANEL -->
 			<div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
 				<form class="navbar-form">
 						<div class="row form-group">
 							<div class="col-xs-12 col-sm-12 col-lg-12 col-xl-12">
-								<button type="submit" class="btn btn-default">Scan</button>
+								<a class="btn btn-default" href="{% url 'device:scan' %}" >Scan</a>
 								<label >Scan for new devices</label>
 							</div>
 						</div>
-						<div class="form-group">
-							<a href="{% url 'device:create' %}" class="btn btn-default">Manual</a>
+						<div class="row form-group">
+							<a class="btn btn-default" href="{% url 'device:create' %}" >Manual</a>
+							<label >Register a new device using an input form</label>
 						</div>
 				</form>
 			</div>

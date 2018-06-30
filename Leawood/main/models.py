@@ -14,6 +14,7 @@ class Field_Device(models.Model):
 	serial_id = models.CharField(max_length=100, unique=True) 
 	description = models.CharField(max_length=1000, blank=True)
 	address=models.CharField(max_length=200)
+	registered = models.BooleanField(default=False)
 
 	class Meta:
 		ordering = ('name',)
@@ -49,11 +50,16 @@ This defines the name, data type and if requried the SI Unit of the
 property value. This information is provided by the Field Devices on pairing
 """
 class Property_Metadata(models.Model):
+     ACCESSES = (
+     ('RO', 'Read Only'),
+     ('RW', 'Read Write')
+     )
      field_device = models.ForeignKey(Field_Device, on_delete=models.CASCADE)
      name = models.CharField(max_length=100)
      unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
      data_type = models.CharField(max_length=50, blank=True)
      scale = models.DecimalField(max_digits=9, decimal_places=3, default=1.0)
+     access = models.CharField(max_length=2, choices=ACCESSES, default='RO')
 
      class Meta:
           verbose_name_plural = 'Property_Metadata'
