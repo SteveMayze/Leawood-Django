@@ -22,6 +22,7 @@ from main import views
 from main import views
 
 urlpatterns = [
+    url(r'^$', views.index, name='index'),
     url(r'^leawood/admin/', admin.site.urls),
     url(r'^leawood/main/', include('main.urls')),
     url(r'^leawood/device/', include('device.urls', namespace="device")),

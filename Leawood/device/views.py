@@ -83,6 +83,21 @@ def device_create( request ):
 	
 def device_scan( request ):
 	
+	if request.method == 'POST':
+		payload = request.POST
+		print(">> POST: {0}".format(request.POST))
+		print(">> content_params: {0}".format(request.content_params))
+		for item in payload:
+			if item.startswith('device: '):
+				print(">> ITEM: {0} = {1}".format(item, payload[item]))
+				tmp, device_id = item.split(":")
+				device = Field_Device.objects.get(id = device_id)
+				device.registered = True
+				device.save()
+			else:
+				print("UNMATCHED ITEM {0}".format(item))
+				
+	
 	queryset_list = Field_Device.objects.filter(registered = False)
 	
 	query = request.GET.get("q")
@@ -106,6 +121,8 @@ def device_scan( request ):
 	context_dict["pagename"] = "Device Scan"
 	context_dict["titlebar"] = "Leawood - Device Scan"
 	context_dict["object_list"] = queryset
+	context_dict["page_request_var"] = page_request_var
+
 	response = render( request, 'device/device_scan.htm', context=context_dict )
 	return response	
 		

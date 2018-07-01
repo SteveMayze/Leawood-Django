@@ -16,86 +16,83 @@
 	</form>
 	
 	<!-- DEVICE LIST and MANAGEMENT -->
+	<!-- SEARCH Bar for the devices -->
+	<form method="GET" class="navbar-form" action="">
+		<div class="row form-group">
+			<div class="col-xs-9 col-sm-9 col-lg-9 col-xl-9">
+				<input type="text" name='q' class="form-control" placeholder="Search Device" value="{{ request.GET.q }}"/>					
+			</div>
+			<div class="col-xs-1 col-sm-1 col-lg-1 col-xl-1">
+			<button type="submit" class="btn btn-default">Search</button>
+			</div>
+		</div>
+	</form>
     {% if object_list %}
-	<div>
-		<!-- SEARCH Bar for the devices -->
-		<form method="GET" class="navbar-form" action="">
-			<div class="row form-group">
-				<div class="col-xs-9 col-sm-9 col-lg-9 col-xl-9">
-					<input type="text" name='q' class="form-control" placeholder="Search Device" value="{{ request.GET.q }}"/>					
-				</div>
-				<div class="col-xs-1 col-sm-1 col-lg-1 col-xl-1">
-				<button type="submit" class="btn btn-default">Search</button>
+		
+		<!-- DEVICE LIST - After scan -->
+		<form class="form" method="POST" action="">
+			{% csrf_token %}
+			<div class="row col-xs-1 col-sm-1 col-lg-1 col-xl-1 offset-sm-9">
+				<button type="submit" class="btn btn-default">Save</button>
+			</div>
+			<div class="row">
+				<div class="col-md-11 offset-md-1" >
+					{% for obj in object_list %}
+							<h3><input class="col-md-1" type="checkbox" name="device: {{obj.id}}"></input>
+							<a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a>
+							<small>{{ obj.address }}</small></h3>
+						<div class="col-md-11 offset-md-1 ">{{ obj.description }}</div>
+					{% cycle "</div></div><hr/><div class='row'><div class='col-md-11 offset-md-1 bg-light'>" "</div></div><hr/><div class='row'><div class='col-md-11 offset-md-1 '>" %}
+					{% endfor %}
 				</div>
 			</div>
 		</form>
-		
-		<!-- DEVICE LIST - After scan -->
-		<div class="row col-xs-1 col-sm-1 col-lg-1 col-xl-1 offset-sm-9">
-			<button type="submit" class="btn btn-default">Save</button>
-		</div>
-		<form class="form" method="POST" action="">
-		<div class="row col-md-11 offset-md-1" >
-			{% for obj in object_list %}
-				<input class="col-md-1" type="checkbox" name="{{obj.id}}"></input>
-				<strong><a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a></strong>
-				<small>{{ obj.address }}</small>
-				<p>{{ obj.description }}</p>
-			{% cycle "</div><div class='col-md-11 offset-md-1 row bg-light'>" "</div><hr/><div class='row col-md-11 offset-md-1 '>" %}
-			{% endfor %}
-			<div class="row">
-			    <ul class="pagination" >
-			        {% if object_list.has_previous %}
-						<li class="page-item">
-							<a class="page-link" href="?{{ page_request_var }}=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo; first</a>
-			            </li>
-						<li class="page-item">
-			            <a class="page-link" href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&lt; previous</a>
-			            </li>
-			        {% else %}
-						<li class="page-item disabled">
-							<a class="page-link" href="#">&laquo; first</a>
-			            </li>
-						<li class="page-item disabled">
-			            <a class="page-link" href="##"> &lt; previous</a>
-			            </li>
-			        {% endif %}
-			
-			        <span class="current">
-						<li class="page-item">
-							<h4>&nbsp;{{ object_list.number }} of {{ object_list.paginator.num_pages }}&nbsp;</h4>
-			            </li>
-			        </span>
-			
-			        {% if object_list.has_next %}
-						<li class="page-item">
-							<a class="page-link" href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next &gt;</a>
-			            </li>
-						<li class="page-item">
-							<a class="page-link" href="?{{ page_request_var }}={{ object_list.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">last &raquo;</a>
-			            </li>
-			        {% else %}
-						<li class="page-item disabled">
-							<a class="page-link" href="#">next &gt;</a>
-			            </li>
-						<li class="page-item disabled">
-							<a class="page-link" href="#">last &raquo;</a>
-			            </li>
-			        {% endif %}
-			    </ul> 
-			</div>	
-		</div>
-		</form>
 
-	</div>
+		<div class="row">
+		    <ul class="pagination col-md-11 offset-md-1" >
+		        {% if object_list.has_previous %}
+					<li class="page-item">
+						<a class="page-link" href="?{{ page_request_var }}=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo; first</a>
+		            </li>
+					<li class="page-item">
+		            <a class="page-link" href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&lt; previous</a>
+		            </li>
+		        {% else %}
+					<li class="page-item disabled">
+						<a class="page-link" href="#">&laquo; first</a>
+		            </li>
+					<li class="page-item disabled">
+		            <a class="page-link" href="##"> &lt; previous</a>
+		            </li>
+		        {% endif %}
+		
+		        <span class="current">
+					<li class="page-item">
+						<h4>&nbsp;{{ object_list.number }} of {{ object_list.paginator.num_pages }}&nbsp;</h4>
+		            </li>
+		        </span>
+		
+		        {% if object_list.has_next %}
+					<li class="page-item">
+						<a class="page-link" href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next &gt;</a>
+		            </li>
+					<li class="page-item">
+						<a class="page-link" href="?{{ page_request_var }}={{ object_list.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">last &raquo;</a>
+		            </li>
+		        {% else %}
+					<li class="page-item disabled">
+						<a class="page-link" href="#">next &gt;</a>
+		            </li>
+					<li class="page-item disabled">
+						<a class="page-link" href="#">last &raquo;</a>
+		            </li>
+		        {% endif %}
+		    </ul> 
+		</div>	
     {% endif %}
 </div>
 	
 	
-	
-</div>
-
-
 
 {% endblock %}
 
