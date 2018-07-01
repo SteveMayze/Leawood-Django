@@ -1,25 +1,12 @@
-{% extends 'base.htm' %}
-{% load staticfiles %}
+{% block register_pane %}
 
-{% block page_title_block %}
-{% endblock %}
-
-{% block body_block %}
-
-
-<div class="container">
-	<h1>{{ pagename }}</h1>
-		<form method="POST" action="" class="form">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<input class="btn btn-default" type="submit" value="Scan..."/>
-	</form>
 	
 	<!-- DEVICE LIST and MANAGEMENT -->
 	<!-- SEARCH Bar for the devices -->
 	<form method="GET" class="navbar-form" action="">
 		<div class="row form-group">
 			<div class="col-xs-9 col-sm-9 col-lg-9 col-xl-9">
+				<input type="hidden" name='t' value="register"/>
 				<input type="text" name='q' class="form-control" placeholder="Search Device" value="{{ request.GET.q }}"/>					
 			</div>
 			<div class="col-xs-1 col-sm-1 col-lg-1 col-xl-1">
@@ -27,17 +14,19 @@
 			</div>
 		</div>
 	</form>
-    {% if object_list %}
+    {% if object_register %}
 		
 		<!-- DEVICE LIST - After scan -->
 		<form class="form" method="POST" action="">
 			{% csrf_token %}
 			<div class="row col-xs-1 col-sm-1 col-lg-1 col-xl-1 offset-sm-9">
+				<input type="hidden" name="t" value="register" />
 				<button type="submit" class="btn btn-default">Save</button>
+				<a class="btn btn-default" href="{% url 'device:create' %}" >Manual</a>
 			</div>
 			<div class="row">
 				<div class="col-md-11 offset-md-1" >
-					{% for obj in object_list %}
+					{% for obj in object_register %}
 							<h3><input class="col-md-1" type="checkbox" name="device: {{obj.id}}"></input>
 							<a href="{{ obj.get_absolute_url }}">{{ obj.name }}</a>
 							<small>{{ obj.address }}</small></h3>
@@ -50,12 +39,12 @@
 
 		<div class="row">
 		    <ul class="pagination col-md-11 offset-md-1" >
-		        {% if object_list.has_previous %}
+		        {% if object_register.has_previous %}
 					<li class="page-item">
-						<a class="page-link" href="?{{ page_request_var }}=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo; first</a>
+						<a class="page-link" href="?{{ tab_request_var }}=register&{{ page_request_var }}=1{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo; first</a>
 		            </li>
 					<li class="page-item">
-		            <a class="page-link" href="?{{ page_request_var }}={{ object_list.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&lt; previous</a>
+		            <a class="page-link" href="?{{ tab_request_var }}=register&{{ page_request_var }}={{ object_register.previous_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&lt; previous</a>
 		            </li>
 		        {% else %}
 					<li class="page-item disabled">
@@ -68,16 +57,16 @@
 		
 		        <span class="current">
 					<li class="page-item">
-						<h4>&nbsp;{{ object_list.number }} of {{ object_list.paginator.num_pages }}&nbsp;</h4>
+						<h4>&nbsp;{{ object_register.number }} of {{ object_register.paginator.num_pages }}&nbsp;</h4>
 		            </li>
 		        </span>
 		
-		        {% if object_list.has_next %}
+		        {% if object_register.has_next %}
 					<li class="page-item">
-						<a class="page-link" href="?{{ page_request_var }}={{ object_list.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next &gt;</a>
+						<a class="page-link" href="?{{ tab_request_var }}=register&{{ page_request_var }}={{ object_register.next_page_number }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">next &gt;</a>
 		            </li>
 					<li class="page-item">
-						<a class="page-link" href="?{{ page_request_var }}={{ object_list.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">last &raquo;</a>
+						<a class="page-link" href="?{{ tab_request_var }}=register&{{ page_request_var }}={{ object_register.paginator.num_pages }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">last &raquo;</a>
 		            </li>
 		        {% else %}
 					<li class="page-item disabled">
@@ -90,9 +79,6 @@
 		    </ul> 
 		</div>	
     {% endif %}
-</div>
-	
-	
 
 {% endblock %}
 

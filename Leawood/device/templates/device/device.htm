@@ -1,0 +1,39 @@
+{% extends 'base.htm' %}
+{% load staticfiles %}
+
+{% block page_title_block %}
+{% endblock %}
+
+{% block body_block %}
+	<div class="container">
+		<h1>{{ pagename }}</h1>
+		<ul class="nav nav-tabs" id="nav-tab" role="tablist">
+			<li class="nav-item">
+				
+				<a class="nav-link {% if current_tab == 'list' %}active show{% endif %}" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Active</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link {% if current_tab == 'register' %}active show{% endif %}" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register New</a>
+			</li>
+		</ul>
+		<br/>
+		<div class="tab-content" id="myTabContent">
+			<!-- DEVICES PANEL -->
+			<div class="tab-pane fade {% if current_tab == 'list' %}active show{% endif %}" id="home" role="tabpanel" aria-labelledby="home-tab">
+				{% block list_pane %}
+					{% include "device/list.htm" %}
+				{% endblock %}
+			</div>
+			
+			<!-- REGISTER PANEL -->
+			<div class="tab-pane fade {% if current_tab == 'register' %}active show{% endif %}" id="register" role="tabpanel" aria-labelledby="register-tab">
+				{% block register_pane %}
+					{% include "device/device_scan.htm" %}
+				{% endblock %}
+			</div>
+		</div>
+		
+		
+	</div>
+{% endblock %}
+
