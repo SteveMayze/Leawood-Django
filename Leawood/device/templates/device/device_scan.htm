@@ -5,24 +5,33 @@
 	<!-- SEARCH Bar for the devices -->
 	<form method="GET" class="navbar-form" action="">
 		<div class="row form-group">
-			<div class="col-xs-9 col-sm-9 col-lg-9 col-xl-9">
+			<!-- div class="col-xs-11 col-sm-11 col-lg-11 col-xl-11" -->
 				<input type="hidden" name='t' value="register"/>
-				<input type="text" name='q' class="form-control" placeholder="Search Device" value="{{ request.GET.q }}"/>					
-			</div>
+				<input type="text" name='q' class="form-control col-xs-11 col-sm-11 col-lg-11 col-xl-11" placeholder="Search Device" value="{{ request.GET.q }}"/>					
+			<!-- /div -->
 			<div class="col-xs-1 col-sm-1 col-lg-1 col-xl-1">
 			<button type="submit" class="btn btn-default">Search</button>
 			</div>
 		</div>
 	</form>
-    {% if object_register %}
-		
 		<!-- DEVICE LIST - After scan -->
 		<form class="form" method="POST" action="">
 			{% csrf_token %}
-			<div class="row col-xs-1 col-sm-1 col-lg-1 col-xl-1 offset-sm-9">
-				<input type="hidden" name="t" value="register" />
-				<button type="submit" class="btn btn-default">Save</button>
-				<a class="btn btn-default" href="{% url 'device:create' %}" >Manual</a>
+			<div class="row">
+				<!-- div class="col-xs-3 col-sm-3 col-lg-3 col-xl-3 offset-sm-8" -->
+					<input type="hidden" name="t" value="register" />
+				    {% if object_register %}	
+					    <div class="offset-xs-8 offset-sm-8 offset-lg-8 offset-xl-8 col-xs-1 col-sm-1 col-lg-1 col-xl-1">
+							<button type="submit" class="btn btn-primary ">Save</button>
+						</div>
+					{% endif %}
+					<div class="{% if not object_register %} offset-xs-9 offset-sm-9 offset-lg-9 offset-xl-9 {% endif %} col-xs-1 col-sm-1 col-lg-1 col-xl-1">
+						<a class="btn {% if object_register %} btn-secondary {% else %} btn-primary {% endif %}" role="button" href="?{{ scan_var }}=t" >Scan</a>
+					</div>
+					<div class="col-xs-1 col-sm-1 col-lg-1 col-xl-1">
+						<a class="btn btn-secondary " role="button" href="{% url 'device:create' %}" >Manual</a>
+					</div>
+				<!-- /div -->
 			</div>
 			<div class="row">
 				<div class="col-md-11 offset-md-1" >
@@ -36,6 +45,7 @@
 				</div>
 			</div>
 		</form>
+    {% if object_register %}		
 
 		<div class="row">
 		    <ul class="pagination col-md-11 offset-md-1" >
