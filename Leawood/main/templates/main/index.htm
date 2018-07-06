@@ -3,11 +3,11 @@
 
 {% block localstyles %}
 <style type="text/css">
-	.banner{
+	.jumbotron{
 		 background-image: url("{% static 'main/leawood-title.jpg' %}");
-		 background-size: cover;
+		 background-position: top;
+		 background-size: 100% auto;
 		 background-repeat: no-repeat;
-		 background-size: 100%;
 }
 </style>
 {% endblock %}
@@ -20,12 +20,10 @@
 {% block body_block %}
       <div class="container">
         <!-- h2>{{ pagename }}</h2 -->
-        <div class="jumbotron banner img-responsive">
-			<p>&nbsp;</p>
-			<p>&nbsp;</p>
-			<p>&nbsp;</p>
-			<h1 class="text-center display-1 text-white" >Leawood Angus Stud</h1>
-			<p>&nbsp;</p>
+        <div class="row ">
+			<div class="col-xs-12 col-sm-12 col-lg-12 col-xl-12 jumbotron">
+				<p class="text-center display-4 display-5 text-white" >Leawood Angus Stud</p>
+			</div>
 		</div>
 		<div>
 			<p>-DASHBOARD-</p>
