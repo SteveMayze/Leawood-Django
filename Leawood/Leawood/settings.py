@@ -36,13 +36,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles/")
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'channels',
     'main',
     'device',
     'tastypie'
@@ -58,16 +58,14 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-redis_host = os.environ.get('REDIS_HOST', 'localhost')
+redis_host = os.environ.get('REDIS_HOST', 'leawood')
 
 CHANNEL_LAYERS = {
     "default": {
-        "BACKEND": "asgi_redis.RedisChannelLayer",
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [(redis_host, 6379)],
             },
-        #       "BACKEND": "asgiref.inmemory.ChannelLayer",
-        "ROUTING": "Leawood.routing.channel_routing",
         },
 }
 
@@ -91,7 +89,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'Leawood.wsgi.application'
+ASGI_APPLICATION = 'Leawood.routing.application'
 
 
 # Database
