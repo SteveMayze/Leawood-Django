@@ -1,5 +1,6 @@
 
 from channels.generic.websocket import WebsocketConsumer
+from  channels.consumer import SyncConsumer
 import json
 
 class DeviceConsumer(WebsocketConsumer):
@@ -17,4 +18,9 @@ class DeviceConsumer(WebsocketConsumer):
             'message': message
         }))
         
+        
+class DeviceChannelConsumer(SyncConsumer):
+	
+	def test_print(self, message):
+		print("Test {}".format( message["text"]))
         
